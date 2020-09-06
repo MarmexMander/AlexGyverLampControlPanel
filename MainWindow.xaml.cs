@@ -12,6 +12,8 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using AlexGyver_s_Lamp_Control_Panel.Models;
+using System.Runtime.Serialization;
 
 namespace AlexGyver_s_Lamp_Control_Panel
 {
@@ -20,10 +22,13 @@ namespace AlexGyver_s_Lamp_Control_Panel
     /// </summary>
     public partial class MainWindow : Window
     {
+        List<Lamp> lamps = new List<Lamp>();
+        Lamp currentLamp;
         public MainWindow()
         {
             InitializeComponent();
         }
+
 
         private void MenuItem_Checked(object sender, RoutedEventArgs e)
         {

@@ -24,12 +24,12 @@
                 <ColumnDefinition Width="3*"/>
                 <ColumnDefinition Width="0" x:Name="consoleColumn"/>
             </Grid.ColumnDefinitions>
-            <TextBox x:Name="textBox" Grid.Column="1" Margin="0,0,32,0" TextWrapping="Wrap" Height="22" VerticalAlignment="Bottom"/>
 
             <Border Grid.Column="1" BorderBrush="#FF020000" BorderThickness="1,0,0,0">
                 <Grid>
-                    <TextBlock x:Name="textBlock" TextWrapping="Wrap" VerticalAlignment="Top" Height="348"/>
-                    <Button x:Name="button" Content="-&gt;" VerticalAlignment="Bottom" Height="22" HorizontalAlignment="Right" Width="32"/>
+                    <TextBlock x:Name="ConsoleOut" TextWrapping="Wrap" VerticalAlignment="Top" Height="348"/>
+                    <TextBox x:Name="ConsoleIn" Margin="0,0,32,0" TextWrapping="Wrap" Height="22" VerticalAlignment="Bottom"/>
+                    <Button x:Name="ConsoleEnter" Content="-&gt;" VerticalAlignment="Bottom" Height="22" HorizontalAlignment="Right" Width="32"/>
                 </Grid>
             </Border>
 

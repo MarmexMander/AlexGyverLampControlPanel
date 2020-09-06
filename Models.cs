@@ -13,15 +13,21 @@ namespace AlexGyver_s_Lamp_Control_Panel.Models
         public int Id { get; set; }
         public string Name { get; set; }
     }
+    [Serializable]
     class Lamp
     {
         public string IP { get; private set; }
         public int Port { get; private set; }
         private IPEndPoint iPEndPoint;
+        public string Name { get; set; }
         public string MAC { get; private set; }
         public List<Effect> Effects { get; private set; }
-        public string Logs { get; private set; }
-        public string LastOutput { get; private set; }
+        [NonSerialized]
+        public string logs;
+        public string Logs { get { return logs; } }
+        [NonSerialized]
+        public string lastOutput;
+        public string LastOutput { get { return logs; } }
         Lamp(string ip, int port)
         {
             IP = ip;
