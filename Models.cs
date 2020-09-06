@@ -28,29 +28,37 @@ namespace AlexGyver_s_Lamp_Control_Panel.Models
         [NonSerialized]
         public string lastOutput;
         public string LastOutput { get { return logs; } }
-        Lamp(string ip, int port)
+        public Lamp(string ip, int port)
         {
             IP = ip;
             Port = port;
-            iPEndPoint = new IPEndPoint(long.Parse(IP.Replace(".","")), Port);
+            iPEndPoint = new IPEndPoint(long.Parse(IP.Replace(".", "")), Port);
         }
-        bool RefreshData(int attempts = 1)
+        public bool RefreshData(int attempts = 1)
         {
-            UdpClient udp = new UdpClient(IP,Port);
-            byte[] datagram = Encoding.ASCII.GetBytes("GET");
+            return SendPacket("GET", attempts);
+        }
+
+        public bool SendPacket(string _datagram, int attempts = 1)
+        {
+            UdpClient udp = new UdpClient(IP, Port);
+            byte[] datagram = Encoding.ASCII.GetBytes(_datagram);
+            logs += "-->" + _datagram + Environment.NewLine;
             for (int i = 0; i < attempts; i++)
             {
                 udp.Send(datagram, datagram.Length);
                 byte[] recivedDatagram = udp.Receive(ref iPEndPoint);
+                string encodedDatagram;
                 try
                 {
-                    string encodedDatagram = Encoding.ASCII.GetString(recivedDatagram, 0, recivedDatagram.Length);
+                    encodedDatagram = Encoding.ASCII.GetString(recivedDatagram, 0, recivedDatagram.Length);
                 }
                 catch
                 {
                     continue;
                 }
-                //TODO: Data parsing
+                lastOutput = encodedDatagram;
+                logs += "<--" + encodedDatagram + Environment.NewLine;
                 return true;
             }
             return false;

@@ -1,9 +1,10 @@
-﻿<Window x:Class="AlexGyver_s_Lamp_Control_Panel.MainWindow"
+﻿<Window
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:AlexGyver_s_Lamp_Control_Panel"
+        xmlns:Models="clr-namespace:AlexGyver_s_Lamp_Control_Panel.Models" x:Class="AlexGyver_s_Lamp_Control_Panel.MainWindow"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="475" MinWidth="475">
     <DockPanel>
@@ -16,7 +17,7 @@
             </MenuItem>
         </Menu>
         <ToolBar DockPanel.Dock="Bottom">
-            <Label Content="0.0.0.0:0000"/>
+            <Label x:Name="ipAndPort" Content="0.0.0.0:0000"/>
             <Ellipse x:Name="connectionMarker" Fill="Red" Height="20" VerticalAlignment="Center" Width="20"/>
         </ToolBar>
         <Grid>
@@ -27,11 +28,14 @@
 
             <Border Grid.Column="1" BorderBrush="#FF020000" BorderThickness="1,0,0,0">
                 <Grid>
-                    <TextBlock x:Name="ConsoleOut" TextWrapping="Wrap" VerticalAlignment="Top" Height="348"/>
+                    <TextBlock x:Name="ConsoleOut" TextWrapping="Wrap" VerticalAlignment="Top" Height="348" Text="{Binding Logs, ElementName=currentLamp, Mode=OneWay}"/>
                     <TextBox x:Name="ConsoleIn" Margin="0,0,32,0" TextWrapping="Wrap" Height="22" VerticalAlignment="Bottom"/>
-                    <Button x:Name="ConsoleEnter" Content="-&gt;" VerticalAlignment="Bottom" Height="22" HorizontalAlignment="Right" Width="32"/>
+                    <Button x:Name="ConsoleEnter" Content="-&gt;" VerticalAlignment="Bottom" Height="22" HorizontalAlignment="Right" Width="32" Click="ConsoleEnter_Click"/>
                 </Grid>
             </Border>
+            <ComboBox x:Name="savedLamps" Margin="10,10,10,0" VerticalAlignment="Top" SelectionChanged="savedLamps_SelectionChanged" SelectedIndex="0">
+                <Label Content="Saved Lamps"/>
+            </ComboBox>
 
         </Grid>
 
