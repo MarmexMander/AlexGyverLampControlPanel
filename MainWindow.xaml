@@ -28,7 +28,9 @@
 
             <Border Grid.Column="1" BorderBrush="#FF020000" BorderThickness="1,0,0,0">
                 <Grid>
-                    <TextBlock x:Name="ConsoleOut" TextWrapping="Wrap" VerticalAlignment="Top" Height="348" Text="{Binding Logs, ElementName=currentLamp, Mode=OneWay}"/>
+                    <ScrollViewer>
+                        <TextBlock x:Name="ConsoleOut" TextWrapping="Wrap" VerticalAlignment="Top" Text="{Binding Logs, ElementName=currentLamp, Mode=OneWay}" Margin="0,0,0,20"/>
+                    </ScrollViewer>
                     <TextBox x:Name="ConsoleIn" Margin="0,0,32,0" TextWrapping="Wrap" Height="22" VerticalAlignment="Bottom"/>
                     <Button x:Name="ConsoleEnter" Content="-&gt;" VerticalAlignment="Bottom" Height="22" HorizontalAlignment="Right" Width="32" Click="ConsoleEnter_Click"/>
                 </Grid>

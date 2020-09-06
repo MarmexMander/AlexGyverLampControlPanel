@@ -59,8 +59,10 @@ namespace AlexGyver_s_Lamp_Control_Panel.Models
                 }
                 lastOutput = encodedDatagram;
                 logs += "<--" + encodedDatagram + Environment.NewLine;
+                udp.Close();
                 return true;
             }
+            udp.Close();
             return false;
         }
     }

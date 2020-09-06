@@ -30,6 +30,7 @@ namespace AlexGyver_s_Lamp_Control_Panel
             InitializeComponent();
             currentLamp = new Lamp("192.168.0.73", 8888);
             refreshData();
+            ConsoleOut.Text = currentLamp.Logs;
         }
 
         void refreshData()
@@ -70,6 +71,7 @@ namespace AlexGyver_s_Lamp_Control_Panel
         {
             currentLamp.SendPacket(ConsoleIn.Text);
             ConsoleIn.Text = "";
+            ConsoleOut.Text = currentLamp.Logs;
         }
     }
 }
