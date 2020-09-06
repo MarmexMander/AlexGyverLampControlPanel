@@ -5,16 +5,35 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:AlexGyver_s_Lamp_Control_Panel"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="MainWindow" Height="450" Width="475" MinWidth="475">
     <DockPanel>
-        <ToolBar x:Name="toolBar" DockPanel.Dock="Top"/>
+        <Menu DockPanel.Dock="Top">
+            <MenuItem Header="_File">
+                <MenuItem Header="_Setings" />
+            </MenuItem>
+            <MenuItem Header="_Window">
+                <MenuItem Header="_UDP Console" IsCheckable="True" IsChecked="False" Checked="MenuItem_Checked" Unchecked="MenuItem_Unchecked" />
+            </MenuItem>
+        </Menu>
         <ToolBar DockPanel.Dock="Bottom">
             <Label Content="0.0.0.0:0000"/>
-            <Ellipse x:Name="connectionMarker" Fill="#FF45EE14" Height="20" VerticalAlignment="Center" Width="20"/>
+            <Ellipse x:Name="connectionMarker" Fill="Red" Height="20" VerticalAlignment="Center" Width="20"/>
         </ToolBar>
         <Grid>
-            
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="3*"/>
+                <ColumnDefinition Width="0" x:Name="consoleColumn"/>
+            </Grid.ColumnDefinitions>
+            <TextBox x:Name="textBox" Grid.Column="1" Margin="0,0,32,0" TextWrapping="Wrap" Height="22" VerticalAlignment="Bottom"/>
+
+            <Border Grid.Column="1" BorderBrush="#FF020000" BorderThickness="1,0,0,0">
+                <Grid>
+                    <TextBlock x:Name="textBlock" TextWrapping="Wrap" VerticalAlignment="Top" Height="348"/>
+                    <Button x:Name="button" Content="-&gt;" VerticalAlignment="Bottom" Height="22" HorizontalAlignment="Right" Width="32"/>
+                </Grid>
+            </Border>
+
         </Grid>
-        
+
     </DockPanel>
 </Window>
