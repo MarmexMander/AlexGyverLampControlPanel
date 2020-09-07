@@ -3,11 +3,16 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Threading;
 using System.Net.Sockets;
 using System.Net;
 
 namespace AlexGyver_s_Lamp_Control_Panel.Models
 {
+    public static class AsyncExtensions
+    {
+
+    }
     class Effect
     {
         public int Id { get; set; }
@@ -23,10 +28,12 @@ namespace AlexGyver_s_Lamp_Control_Panel.Models
         public string MAC { get; private set; }
         public List<Effect> Effects { get; private set; }
         [NonSerialized]
-        public string logs;
+        string logs;
         public string Logs { get { return logs; } }
         [NonSerialized]
-        public string lastOutput;
+        string lastOutput;
+        //[NonSerialized]
+        //Task<UdpReceiveResult> currentReceive;
         public string LastOutput { get { return logs; } }
         public Lamp(string ip, int port)
         {
@@ -38,30 +45,56 @@ namespace AlexGyver_s_Lamp_Control_Panel.Models
         {
             return SendPacket("GET", attempts);
         }
-
         public bool SendPacket(string _datagram, int attempts = 1)
         {
             UdpClient udp = new UdpClient(IP, Port);
             byte[] datagram = Encoding.ASCII.GetBytes(_datagram);
             logs += "-->" + _datagram + Environment.NewLine;
-            for (int i = 0; i < attempts; i++)
+            for (int attempt = 0; attempt < attempts; attempt++)
             {
-                udp.Send(datagram, datagram.Length);
-                byte[] recivedDatagram = udp.Receive(ref iPEndPoint);
+                byte[] recivedDatagram = new byte[1];
                 string encodedDatagram;
-                try
+                udp.Send(datagram, datagram.Length);
+                bool recCompleted = false;
+                udp.BeginReceive((IAsyncResult res) =>
                 {
-                    encodedDatagram = Encoding.ASCII.GetString(recivedDatagram, 0, recivedDatagram.Length);
-                }
-                catch
+                    try
+                    {
+                        recivedDatagram = udp.EndReceive(res, ref iPEndPoint);
+                    }
+                    catch { }
+                    recCompleted = true;
+                }, null);
+
+                for (int time = 0; time < 20; time++)
+                    if (recCompleted)
+                    {
+                        encodedDatagram = Encoding.ASCII.GetString(recivedDatagram, 0, recivedDatagram.Length);
+                        lastOutput = encodedDatagram;
+                        logs += "<--" + encodedDatagram + Environment.NewLine;
+                        break;
+                    }
+                    else
+                    {
+                        Thread.Sleep(100);
+                        continue;
+                    }
+                if (recCompleted)
                 {
-                    continue;
+                    udp.Close();
+                    return true;
                 }
-                lastOutput = encodedDatagram;
-                logs += "<--" + encodedDatagram + Environment.NewLine;
-                udp.Close();
-                return true;
+                else
+                {
+                    try
+                    {
+                        udp.EndReceive(udp.ReceiveAsync(), ref iPEndPoint);
+                    }
+                    catch { }
+                    udp.Close();
+                }
             }
+
             udp.Close();
             return false;
         }
