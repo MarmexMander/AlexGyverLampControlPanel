@@ -119,5 +119,14 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Connected Services\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\AGLampService\AGLampService.csproj">
+      <Project>{aaf0b4a8-fe76-4f16-815f-27c645f8dd51}</Project>
+      <Name>AGLampService</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

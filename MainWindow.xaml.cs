@@ -34,28 +34,27 @@ namespace AlexGyver_s_Lamp_Control_Panel
         public MainWindow()
         {
             InitializeComponent();
+            Binding binding = new Binding();
+            binding.Source = Controller.MainController.GetInstance();
+            binding.Path = new PropertyPath("savedLamps");
+            savedLamps.SetBinding(ComboBox.ItemsSourceProperty, binding);
             refreshData();
-            RefreshInterfaceData();
+            //RefreshInterfaceData();
+            
             //currentLamp = new Lamp("192.168.0.73", 8888);
             //refreshData();
             //ConsoleOut.Text = currentLamp.Logs;
         }
 
-        public void RefreshInterfaceData()
-        {
-            savedLamps.Items.Clear();
-            savedLamps.Items.Add("Select Lamp");
-            savedLamps.Items.Add("Add Lamp");
-            foreach (Lamp lamp in Controller.MainController.GetInstance().savedLamps)
-                savedLamps.Items.Add(lamp);
-            savedLamps.SelectedIndex = 0;
-            if (!Controller.MainController.GetInstance().savedLamps.Contains(CurrentLamp))
-            {
-                saveLampBtn.Visibility = Visibility.Hidden;
-            }
-            else
-                saveLampBtn.Visibility = Visibility.Visible;
-        }
+        //public void RefreshInterfaceData()
+        //{
+        //    savedLamps.Items.Clear();
+        //    savedLamps.Items.Add("Select Lamp");
+        //    savedLamps.Items.Add("Add Lamp");
+        //    foreach (Lamp lamp in Controller.MainController.GetInstance().savedLamps)
+        //        savedLamps.Items.Add(lamp);
+        //    savedLamps.SelectedIndex = 0;
+        //}
         public void refreshData()
         {
             if (CurrentLamp == null)
@@ -63,6 +62,7 @@ namespace AlexGyver_s_Lamp_Control_Panel
                 ipAndPort.Content = "Select lamp";
                 connectionMarker.Fill = new SolidColorBrush(Color.FromRgb(255, 0, 0));
                 connected = false;
+                saveLampBtn.Visibility = Visibility.Hidden;
                 return;
             }
             ipAndPort.Content = CurrentLamp.IP + ':' + CurrentLamp.Port.ToString();
@@ -71,6 +71,12 @@ namespace AlexGyver_s_Lamp_Control_Panel
                 connectionMarker.Fill = new SolidColorBrush(Color.FromRgb(0, 255, 0));
                 ConsoleOut.Text = CurrentLamp.Logs;
                 connected = true;
+                if (Controller.MainController.GetInstance().savedLamps.Contains(CurrentLamp))
+                {
+                    saveLampBtn.Visibility = Visibility.Hidden;
+                }
+                else
+                    saveLampBtn.Visibility = Visibility.Visible;
             }
             else
             {
@@ -105,8 +111,7 @@ namespace AlexGyver_s_Lamp_Control_Panel
                     AddLampWindow dialog = new AddLampWindow();
                     dialog.ShowDialog();
                     Controller.MainController.GetInstance().SaveLamp(dialog.ReturnValue);
-                    RefreshInterfaceData();
-                    CurrentLamp = CurrentLamp;
+                    //RefreshInterfaceData();
                     refreshData();
 
                 }
@@ -140,8 +145,7 @@ namespace AlexGyver_s_Lamp_Control_Panel
                 dialog = new AddLampWindow();
             dialog.ShowDialog();
             Controller.MainController.GetInstance().SaveLamp(dialog.ReturnValue);
-            RefreshInterfaceData();
-            CurrentLamp = CurrentLamp;
+            //RefreshInterfaceData();
             refreshData();
         }
 
@@ -153,7 +157,17 @@ namespace AlexGyver_s_Lamp_Control_Panel
             if(dialog.ReturnValue!=null)
             CurrentLamp = dialog.ReturnValue;
             refreshData();
-            RefreshInterfaceData();
+            //RefreshInterfaceData();
+        }
+
+        private void MenuItem_Click(object sender, RoutedEventArgs e)
+        {
+            Controller.MainController.GetInstance().SaveToFile();
+        }
+
+        private void MenuItem_Click_1(object sender, RoutedEventArgs e)
+        {
+            Controller.MainController.GetInstance().LoadFromFile();
         }
     }
 }

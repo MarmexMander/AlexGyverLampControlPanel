@@ -11,6 +11,8 @@
         <Menu DockPanel.Dock="Top">
             <MenuItem Header="_File">
                 <MenuItem Header="_Setings" />
+                <MenuItem Header="_Save lamps to file" Click="MenuItem_Click" />
+                <MenuItem Header="_Load lamps from file" Click="MenuItem_Click_1" />
             </MenuItem>
             <MenuItem Header="_Window">
                 <MenuItem Header="_UDP Console" IsCheckable="True" IsChecked="False" Checked="MenuItem_Checked" Unchecked="MenuItem_Unchecked" />

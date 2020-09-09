@@ -6,7 +6,7 @@
         xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
         xmlns:local="clr-namespace:AlexGyver_s_Lamp_Control_Panel"
         mc:Ignorable="d"
-        Title="Select Lamp" Height="136.667" Width="236">
+        Title="Select Lamp" Height="141.334" Width="236" ResizeMode="NoResize">
     <Grid>
         <TextBox x:Name="ipTB" HorizontalAlignment="Left" Height="20" Margin="60,28,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="96"/>
         <Label x:Name="label" Content="IP:port" HorizontalAlignment="Left" Margin="10,24,0,0" VerticalAlignment="Top"/>
