@@ -22,29 +22,61 @@ namespace AlexGyver_s_Lamp_Control_Panel
     /// </summary>
     public partial class MainWindow : Window
     {
-        List<Lamp> lamps = new List<Lamp>();
-        Lamp currentLamp;
+        
+        Lamp CurrentLamp { get; set; }
+        //Lamp CurrentLamp { get { return currentLamp; } set
+        //    {
+        //        currentLamp = value;
+        //    }
+
+        //}
         bool connected = false;
         public MainWindow()
         {
             InitializeComponent();
-            currentLamp = new Lamp("192.168.0.73", 8888);
             refreshData();
-            ConsoleOut.Text = currentLamp.Logs;
+            RefreshInterfaceData();
+            //currentLamp = new Lamp("192.168.0.73", 8888);
+            //refreshData();
+            //ConsoleOut.Text = currentLamp.Logs;
         }
 
-        void refreshData()
+        public void RefreshInterfaceData()
         {
-            ipAndPort.Content = currentLamp.IP + ':' + currentLamp.Port.ToString();
-            if (currentLamp.RefreshData())
+            savedLamps.Items.Clear();
+            savedLamps.Items.Add("Select Lamp");
+            savedLamps.Items.Add("Add Lamp");
+            foreach (Lamp lamp in Controller.MainController.GetInstance().savedLamps)
+                savedLamps.Items.Add(lamp);
+            savedLamps.SelectedIndex = 0;
+            if (!Controller.MainController.GetInstance().savedLamps.Contains(CurrentLamp))
+            {
+                saveLampBtn.Visibility = Visibility.Hidden;
+            }
+            else
+                saveLampBtn.Visibility = Visibility.Visible;
+        }
+        public void refreshData()
+        {
+            if (CurrentLamp == null)
+            {
+                ipAndPort.Content = "Select lamp";
+                connectionMarker.Fill = new SolidColorBrush(Color.FromRgb(255, 0, 0));
+                connected = false;
+                return;
+            }
+            ipAndPort.Content = CurrentLamp.IP + ':' + CurrentLamp.Port.ToString();
+            if (CurrentLamp.RefreshData())
             {
                 connectionMarker.Fill = new SolidColorBrush(Color.FromRgb(0, 255, 0));
+                ConsoleOut.Text = CurrentLamp.Logs;
                 connected = true;
             }
             else
             {
-                connectionMarker.Fill = new SolidColorBrush(Color.FromRgb(0, 0, 0));
-                connected = true;
+                connectionMarker.Fill = new SolidColorBrush(Color.FromRgb(255, 0, 0));
+                ConsoleOut.Text = CurrentLamp.Logs;
+                connected = false;
             }
         }
         private void MenuItem_Checked(object sender, RoutedEventArgs e)
@@ -63,15 +95,65 @@ namespace AlexGyver_s_Lamp_Control_Panel
 
         private void savedLamps_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if(savedLamps.SelectedItem as Lamp != null)
-            currentLamp = savedLamps.SelectedItem as Lamp;
+            object selected = savedLamps.SelectedItem;
+            if (selected == null)
+                return;
+            if (  selected.GetType().Name == "".GetType().Name )
+            {
+                if(selected.ToString() == "Add Lamp")
+                {
+                    AddLampWindow dialog = new AddLampWindow();
+                    dialog.ShowDialog();
+                    Controller.MainController.GetInstance().SaveLamp(dialog.ReturnValue);
+                    RefreshInterfaceData();
+                    CurrentLamp = CurrentLamp;
+                    refreshData();
+
+                }
+                CurrentLamp = null;
+                refreshData();
+                return;
+            }
+            if (selected as Lamp != null)
+            {
+                CurrentLamp = savedLamps.SelectedItem as Lamp;
+                refreshData();
+            }
         }
 
         private void ConsoleEnter_Click(object sender, RoutedEventArgs e)
         {
-            currentLamp.SendPacket(ConsoleIn.Text);
-            ConsoleIn.Text = "";
-            ConsoleOut.Text = currentLamp.Logs;
+            if (ConsoleIn.Text != "")
+            {
+                CurrentLamp.SendPacket(ConsoleIn.Text);
+                ConsoleIn.Text = "";
+                ConsoleOut.Text = CurrentLamp.Logs;
+            }
+        }
+
+        private void saveLampBtn_Click(object sender, RoutedEventArgs e)
+        {
+            AddLampWindow dialog;
+            if(CurrentLamp != null)
+            dialog = new AddLampWindow(CurrentLamp.IP, CurrentLamp.Port, CurrentLamp.Name);
+            else
+                dialog = new AddLampWindow();
+            dialog.ShowDialog();
+            Controller.MainController.GetInstance().SaveLamp(dialog.ReturnValue);
+            RefreshInterfaceData();
+            CurrentLamp = CurrentLamp;
+            refreshData();
+        }
+
+        private void ipAndPort_MouseUp(object sender, MouseButtonEventArgs e)
+        {
+
+            var dialog = new AddLampWindow();
+            dialog.ShowDialog();
+            if(dialog.ReturnValue!=null)
+            CurrentLamp = dialog.ReturnValue;
+            refreshData();
+            RefreshInterfaceData();
         }
     }
 }

@@ -1,0 +1,22 @@
+﻿<Window x:Class="AlexGyver_s_Lamp_Control_Panel.AddLampWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
+        xmlns:local="clr-namespace:AlexGyver_s_Lamp_Control_Panel"
+        mc:Ignorable="d"
+        Title="Select Lamp" Height="136.667" Width="236">
+    <Grid>
+        <TextBox x:Name="ipTB" HorizontalAlignment="Left" Height="20" Margin="60,28,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="96"/>
+        <Label x:Name="label" Content="IP:port" HorizontalAlignment="Left" Margin="10,24,0,0" VerticalAlignment="Top"/>
+        <Label x:Name="label1" Width="65" Content="Lamp info" VerticalAlignment="Top"/>
+        <TextBox MaxLength="5" x:Name="portTB" HorizontalAlignment="Left" Height="20" Margin="170,28,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="41"/>
+        <Label x:Name="label2" Content=":" HorizontalAlignment="Left" Margin="157,24,0,0" VerticalAlignment="Top"/>
+        <Label x:Name="label3" Content="Name" HorizontalAlignment="Left" Margin="10,50,0,0" VerticalAlignment="Top"/>
+        <TextBox  x:Name="nameTB" HorizontalAlignment="Left" Height="20" Margin="60,53,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="151"/>
+        <Button x:Name="cancleBTN" Content="Cancle" Width="75"  Height="20" VerticalAlignment="Bottom" Margin="20,0,0,5" HorizontalAlignment="Left" Click="cancleBTN_Click"/>
+        <Button x:Name="OkBTN" Content="Ok" Width="75" Margin="0,0,20,5" Height="20" VerticalAlignment="Bottom" HorizontalAlignment="Right" Click="OkBTN_Click"/>
+
+    </Grid>
+</Window>

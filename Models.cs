@@ -9,17 +9,13 @@ using System.Net;
 
 namespace AlexGyver_s_Lamp_Control_Panel.Models
 {
-    public static class AsyncExtensions
-    {
-
-    }
-    class Effect
+    public class Effect
     {
         public int Id { get; set; }
         public string Name { get; set; }
     }
     [Serializable]
-    class Lamp
+    public class Lamp
     {
         public string IP { get; private set; }
         public int Port { get; private set; }
@@ -32,13 +28,12 @@ namespace AlexGyver_s_Lamp_Control_Panel.Models
         public string Logs { get { return logs; } }
         [NonSerialized]
         string lastOutput;
-        //[NonSerialized]
-        //Task<UdpReceiveResult> currentReceive;
         public string LastOutput { get { return logs; } }
-        public Lamp(string ip, int port)
+        public Lamp(string ip, int port, string name="")
         {
             IP = ip;
             Port = port;
+            Name = name;
             iPEndPoint = new IPEndPoint(long.Parse(IP.Replace(".", "")), Port);
         }
         public bool RefreshData(int attempts = 1)
@@ -97,6 +92,11 @@ namespace AlexGyver_s_Lamp_Control_Panel.Models
 
             udp.Close();
             return false;
+        }
+
+        public override string ToString()
+        {
+            return iPEndPoint.ToString() + " " + Name;
         }
     }
 }

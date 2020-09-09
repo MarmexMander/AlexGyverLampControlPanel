@@ -17,8 +17,9 @@
             </MenuItem>
         </Menu>
         <ToolBar DockPanel.Dock="Bottom">
-            <Label x:Name="ipAndPort" Content="0.0.0.0:0000"/>
+            <Label x:Name="ipAndPort" Content="0.0.0.0:0000" MouseUp="ipAndPort_MouseUp"/>
             <Ellipse x:Name="connectionMarker" Fill="Red" Height="20" VerticalAlignment="Center" Width="20"/>
+            <Button x:Name="saveLampBtn" Content="Save this lamp" VerticalAlignment="Stretch" Height="25" Margin="10,0,0,0" Click="saveLampBtn_Click"/>
         </ToolBar>
         <Grid>
             <Grid.ColumnDefinitions>
@@ -35,9 +36,7 @@
                     <Button x:Name="ConsoleEnter" Content="-&gt;" VerticalAlignment="Bottom" Height="22" HorizontalAlignment="Right" Width="32" Click="ConsoleEnter_Click"/>
                 </Grid>
             </Border>
-            <ComboBox x:Name="savedLamps" Margin="10,10,10,0" VerticalAlignment="Top" SelectionChanged="savedLamps_SelectionChanged" SelectedIndex="0">
-                <Label Content="Saved Lamps"/>
-            </ComboBox>
+            <ComboBox x:Name="savedLamps" Margin="10,10,10,0" VerticalAlignment="Top" SelectionChanged="savedLamps_SelectionChanged" SelectedIndex="0"/>
 
         </Grid>
 
