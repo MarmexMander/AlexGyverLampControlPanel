@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:AlexGyver_s_Lamp_Control_Panel"
         xmlns:Models="clr-namespace:AlexGyver_s_Lamp_Control_Panel.Models" x:Class="AlexGyver_s_Lamp_Control_Panel.MainWindow"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="475" MinWidth="475" Closing="Window_Closing">
+        Title="MainWindow" Height="450" Width="485" MinWidth="485" Closing="Window_Closing">
     <DockPanel>
         <Menu DockPanel.Dock="Top">
             <MenuItem Header="_File">
@@ -37,7 +37,26 @@
                 </Grid>
             </Border>
             <ComboBox x:Name="savedLamps" Margin="10,10,10,0" VerticalAlignment="Top" SelectionChanged="savedLamps_SelectionChanged" SelectedIndex="0"/>
+            <Grid x:Name="AdaptiveControlPanelGrid" Margin="10,37,10,10" IsEnabled="False">
+            </Grid>
+            <Grid x:Name="StaticControlPanelGrid" Margin="10,37,10,10">
+                <ComboBox x:Name="comboBox" Margin="50,20,50,0" VerticalAlignment="Top"/>
+                <Button x:Name="button" Content="⯇" HorizontalAlignment="Left" Margin="50,42,0,0" VerticalAlignment="Top" Width="22" Height="22"/>
+                <Button x:Name="button_Copy" Content="⯈" HorizontalAlignment="Left" Margin="116,42,0,0" VerticalAlignment="Top" Width="22" Height="22"/>
+                <Button x:Name="button1" Content="Turn On/Off" Margin="0,42,50,0" VerticalAlignment="Top" Height="22" HorizontalAlignment="Right" Width="88"/>
+                <Border BorderBrush="Black" BorderThickness="1" HorizontalAlignment="Left" Height="22" Margin="72,42,0,0" VerticalAlignment="Top" Width="44">
+                    <TextBlock x:Name="effectNumber" TextWrapping="Wrap" Text="" TextAlignment="Center" LineHeight="10" FontSize="14"/>
 
+                </Border>
+                <StackPanel Margin="50,69,50,10">
+                    <Grid Margin="0,3">
+                        <Slider x:Name="slider" Margin="40,0,0,0"/>
+                        <Label BorderThickness="1" Content="" HorizontalAlignment="Left" Margin="0" VerticalAlignment="Center" Height="18" Width="40" FontSize="7" BorderBrush="Black"/>
+
+                    </Grid>
+                </StackPanel>
+                <Button x:Name="button1_Copy" Content="Button" Margin="179.5,42,179.5,0" VerticalAlignment="Top" Height="22" Width="88" Click="button1_Copy_Click"/>
+            </Grid>
         </Grid>
 
     </DockPanel>

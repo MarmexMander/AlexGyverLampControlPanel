@@ -179,5 +179,10 @@ namespace AlexGyver_s_Lamp_Control_Panel
         {
             Controller.MainController.GetInstance().SaveToFile();
         }
+
+        private void button1_Copy_Click(object sender, RoutedEventArgs e)
+        {
+            var x = CurrentLamp.InterfaceData;
+        }
     }
 }

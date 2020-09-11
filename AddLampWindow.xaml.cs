@@ -35,12 +35,18 @@ namespace AlexGyver_s_Lamp_Control_Panel
 
         private void OkBTN_Click(object sender, RoutedEventArgs e)
         {
-            if ((bool)checkBox.IsChecked)
-                lamp = new Models.KDnLamp(ipTB.Text, int.Parse(portTB.Text), nameTB.Text);
-            else
-                lamp = new Models.GyverLamp(ipTB.Text, int.Parse(portTB.Text), nameTB.Text);
-
-            this.Close();
+            try
+            {
+                if ((bool)checkBox.IsChecked)
+                    lamp = new Models.KDnLamp(ipTB.Text, int.Parse(portTB.Text), nameTB.Text);
+                else
+                    lamp = new Models.GyverLamp(ipTB.Text, int.Parse(portTB.Text), nameTB.Text);
+                this.Close();
+            }
+            catch
+            {
+                MessageBox.Show("Incorrect IP or port");
+            }
         }
 
         private void cancleBTN_Click(object sender, RoutedEventArgs e)

@@ -7,11 +7,14 @@ using System.Threading;
 using System.Net.Sockets;
 using System.Net.Http;
 using System.Net;
+using Newtonsoft.Json;
+using System.Xml;
 
 namespace AlexGyver_s_Lamp_Control_Panel.Models
 {
     public class Effect
     {
+        
         public int Id { get; set; }
         public string Name { get; set; }
 
@@ -22,6 +25,7 @@ namespace AlexGyver_s_Lamp_Control_Panel.Models
         int Port { get; }
         IPEndPoint IPEndPoint { get; }
         string Name { get; set; }
+        XmlNode InterfaceData { get; }
         string MAC { get; }
         List<Effect> Effects { get; }
         string Logs { get; }
@@ -45,6 +49,15 @@ namespace AlexGyver_s_Lamp_Control_Panel.Models
         [NonSerialized]
         string lastOutput;
         public string LastOutput { get { return lastOutput; } }
+        public XmlNode InterfaceData
+        {
+            get
+            {
+                XmlDocument xmlDocument = new XmlDocument();
+                
+                return xmlDocument.SelectSingleNode("");
+            }
+        }
         public GyverLamp(string ip, int port, string name = "")
         {
             IP = ip;
@@ -131,6 +144,15 @@ namespace AlexGyver_s_Lamp_Control_Panel.Models
         [NonSerialized]
         string lastOutput;
         public string LastOutput { get { return lastOutput; } }
+        public XmlNode InterfaceData
+        {
+            get
+            {
+                if (SendPacket("echo"))
+                    return JsonConvert.DeserializeXmlNode("{\"root\":"+lastOutput+"}");
+                else return null;
+            }
+        }
         public KDnLamp(string ip, int port, string name = "")
         {
             IP = ip;
