@@ -6,20 +6,18 @@
         xmlns:local="clr-namespace:AlexGyver_s_Lamp_Control_Panel"
         xmlns:Models="clr-namespace:AlexGyver_s_Lamp_Control_Panel.Models" x:Class="AlexGyver_s_Lamp_Control_Panel.MainWindow"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="475" MinWidth="475">
+        Title="MainWindow" Height="450" Width="475" MinWidth="475" Closing="Window_Closing">
     <DockPanel>
         <Menu DockPanel.Dock="Top">
             <MenuItem Header="_File">
                 <MenuItem Header="_Setings" />
-                <MenuItem Header="_Save lamps to file" Click="MenuItem_Click" />
-                <MenuItem Header="_Load lamps from file" Click="MenuItem_Click_1" />
             </MenuItem>
             <MenuItem Header="_Window">
                 <MenuItem Header="_UDP Console" IsCheckable="True" IsChecked="False" Checked="MenuItem_Checked" Unchecked="MenuItem_Unchecked" />
             </MenuItem>
         </Menu>
         <ToolBar DockPanel.Dock="Bottom">
-            <Label x:Name="ipAndPort" Content="0.0.0.0:0000" MouseUp="ipAndPort_MouseUp"/>
+            <Label x:Name="ipAndPort" Content="0.0.0.0:0000" MouseUp="ipAndPort_MouseUp" Cursor="Hand"/>
             <Ellipse x:Name="connectionMarker" Fill="Red" Height="20" VerticalAlignment="Center" Width="20"/>
             <Button x:Name="saveLampBtn" Content="Save this lamp" VerticalAlignment="Stretch" Height="25" Margin="10,0,0,0" Click="saveLampBtn_Click"/>
         </ToolBar>

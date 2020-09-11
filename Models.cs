@@ -112,7 +112,7 @@ namespace AlexGyver_s_Lamp_Control_Panel.Models
 
         public override string ToString()
         {
-            return iPEndPoint.ToString() + " " + Name;
+            return IP + ':' + Port.ToString() + " " + Name;
         }
     }
     [Serializable]
@@ -138,29 +138,31 @@ namespace AlexGyver_s_Lamp_Control_Panel.Models
             Name = name;
             iPEndPoint = new IPEndPoint(long.Parse(IP.Replace(".", "")), Port);
         }
-        
+
         public bool RefreshData(int attempts = 1)
         {
             return SendPacket("heap", attempts);
         }
         public bool SendPacket(string _datagram, int attempts = 1)
         {
-            Uri lampUri = new UriBuilder(IP+':'+Port.ToString()).Uri;
+            Uri lampUri = new UriBuilder(IP + ':' + Port.ToString()).Uri;
             //_datagram = "GET " + lampUri + _datagram;
-            logs += "-->" + _datagram + Environment.NewLine; 
+            logs += "-->" + _datagram + Environment.NewLine;
             HttpClient http = new HttpClient();
             http.BaseAddress = lampUri;
-            http.Timeout = new TimeSpan(0,0,3);
+            http.Timeout = new TimeSpan(0, 0, 3);
             //HttpRequestMessage httpRequest = new HttpRequestMessage(new HttpMethod(HttpMethod.Get.Method+' '+_datagram),lampUri);
-            HttpRequestMessage httpRequest = new HttpRequestMessage(HttpMethod.Get, lampUri+_datagram);
+            HttpRequestMessage httpRequest = new HttpRequestMessage(HttpMethod.Get, lampUri + _datagram);
             var requestTask = http.SendAsync(httpRequest);
             if (requestTask.Wait(3000))
             {
                 HttpResponseMessage response = requestTask.Result;
-                if (response.IsSuccessStatusCode) {
+                if (response.IsSuccessStatusCode)
+                {
                     string responseContent = "";
                     var readRespToStringTask = response.Content.ReadAsStringAsync();
-                    if (readRespToStringTask.Wait(3000)) {
+                    if (readRespToStringTask.Wait(3000))
+                    {
                         responseContent = readRespToStringTask.Result;
                         lastOutput = responseContent;
                         logs += "<--" + responseContent + Environment.NewLine;
@@ -174,7 +176,7 @@ namespace AlexGyver_s_Lamp_Control_Panel.Models
 
         public override string ToString()
         {
-            return iPEndPoint.ToString() + " " + Name;
+            return IP + ':' + Port.ToString() + " " + Name;
         }
     }
 }

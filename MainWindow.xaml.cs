@@ -38,6 +38,7 @@ namespace AlexGyver_s_Lamp_Control_Panel
             binding.Source = Controller.MainController.GetInstance();
             binding.Path = new PropertyPath("savedLamps");
             savedLamps.SetBinding(ComboBox.ItemsSourceProperty, binding);
+            Controller.MainController.GetInstance().LoadFromFile();
             refreshData();
             //RefreshInterfaceData();
             
@@ -71,7 +72,7 @@ namespace AlexGyver_s_Lamp_Control_Panel
                 connectionMarker.Fill = new SolidColorBrush(Color.FromRgb(0, 255, 0));
                 ConsoleOut.Text = CurrentLamp.Logs;
                 connected = true;
-                if (Controller.MainController.GetInstance().savedLamps.Contains(CurrentLamp))
+                if (Controller.MainController.GetInstance().savedLamps.Find(l => l.IP == CurrentLamp.IP) != null)
                 {
                     saveLampBtn.Visibility = Visibility.Hidden;
                 }
@@ -172,6 +173,11 @@ namespace AlexGyver_s_Lamp_Control_Panel
         private void MenuItem_Click_1(object sender, RoutedEventArgs e)
         {
             Controller.MainController.GetInstance().LoadFromFile();
+        }
+
+        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            Controller.MainController.GetInstance().SaveToFile();
         }
     }
 }
