@@ -6,7 +6,7 @@
         xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
         xmlns:local="clr-namespace:AlexGyver_s_Lamp_Control_Panel"
         mc:Ignorable="d"
-        Title="Select Lamp" Height="141.334" Width="236" ResizeMode="NoResize">
+        Title="Select Lamp" Height="154.667" Width="236" ResizeMode="NoResize">
     <Grid>
         <TextBox x:Name="ipTB" HorizontalAlignment="Left" Height="20" Margin="60,28,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="96"/>
         <Label x:Name="label" Content="IP:port" HorizontalAlignment="Left" Margin="10,24,0,0" VerticalAlignment="Top"/>
@@ -17,6 +17,7 @@
         <TextBox  x:Name="nameTB" HorizontalAlignment="Left" Height="20" Margin="60,53,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="151"/>
         <Button x:Name="cancleBTN" Content="Cancle" Width="75"  Height="20" VerticalAlignment="Bottom" Margin="20,0,0,5" HorizontalAlignment="Left" Click="cancleBTN_Click"/>
         <Button x:Name="OkBTN" Content="Ok" Width="75" Margin="0,0,20,5" Height="20" VerticalAlignment="Bottom" HorizontalAlignment="Right" Click="OkBTN_Click"/>
+        <CheckBox x:Name="checkBox" Content="kDn`s firmwire" HorizontalAlignment="Left" Margin="14,81,0,0" VerticalAlignment="Top"/>
 
     </Grid>
 </Window>

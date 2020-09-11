@@ -19,8 +19,8 @@ namespace AlexGyver_s_Lamp_Control_Panel
     /// </summary>
     public partial class AddLampWindow : Window
     {
-        Models.Lamp lamp;
-        public Models.Lamp ReturnValue { get { return lamp; } }
+        Models.FireLamp lamp;
+        public Models.FireLamp ReturnValue { get { return lamp; } }
         public AddLampWindow()
         {
             InitializeComponent();
@@ -35,7 +35,11 @@ namespace AlexGyver_s_Lamp_Control_Panel
 
         private void OkBTN_Click(object sender, RoutedEventArgs e)
         {
-            lamp = new Models.Lamp(ipTB.Text, int.Parse(portTB.Text), nameTB.Text);
+            if ((bool)checkBox.IsChecked)
+                lamp = new Models.KDnLamp(ipTB.Text, int.Parse(portTB.Text), nameTB.Text);
+            else
+                lamp = new Models.GyverLamp(ipTB.Text, int.Parse(portTB.Text), nameTB.Text);
+
             this.Close();
         }
 

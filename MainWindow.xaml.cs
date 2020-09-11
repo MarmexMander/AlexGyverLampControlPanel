@@ -22,8 +22,8 @@ namespace AlexGyver_s_Lamp_Control_Panel
     /// </summary>
     public partial class MainWindow : Window
     {
-        
-        Lamp CurrentLamp { get; set; }
+
+        FireLamp CurrentLamp { get; set; }
         //Lamp CurrentLamp { get { return currentLamp; } set
         //    {
         //        currentLamp = value;
@@ -119,9 +119,9 @@ namespace AlexGyver_s_Lamp_Control_Panel
                 refreshData();
                 return;
             }
-            if (selected as Lamp != null)
+            if (selected as FireLamp != null)
             {
-                CurrentLamp = savedLamps.SelectedItem as Lamp;
+                CurrentLamp = savedLamps.SelectedItem as FireLamp;
                 refreshData();
             }
         }
@@ -139,8 +139,12 @@ namespace AlexGyver_s_Lamp_Control_Panel
         private void saveLampBtn_Click(object sender, RoutedEventArgs e)
         {
             AddLampWindow dialog;
-            if(CurrentLamp != null)
-            dialog = new AddLampWindow(CurrentLamp.IP, CurrentLamp.Port, CurrentLamp.Name);
+            if (CurrentLamp != null)
+            {
+                if (Controller.MainController.GetInstance().savedLamps.Find(l => l.IP == CurrentLamp.IP) != null)
+                    return;
+                dialog = new AddLampWindow(CurrentLamp.IP, CurrentLamp.Port, CurrentLamp.Name);
+            }
             else
                 dialog = new AddLampWindow();
             dialog.ShowDialog();
