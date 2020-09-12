@@ -14,6 +14,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using AlexGyver_s_Lamp_Control_Panel.Models;
 using System.Runtime.Serialization;
+using System.Xml;
 
 namespace AlexGyver_s_Lamp_Control_Panel
 {
@@ -34,30 +35,26 @@ namespace AlexGyver_s_Lamp_Control_Panel
         public MainWindow()
         {
             InitializeComponent();
-            Binding binding = new Binding();
-            binding.Source = Controller.MainController.GetInstance();
-            binding.Path = new PropertyPath("savedLamps");
-            savedLamps.SetBinding(ComboBox.ItemsSourceProperty, binding);
             Controller.MainController.GetInstance().LoadFromFile();
             refreshData();
             //RefreshInterfaceData();
-            
+
             //currentLamp = new Lamp("192.168.0.73", 8888);
             //refreshData();
             //ConsoleOut.Text = currentLamp.Logs;
         }
 
-        //public void RefreshInterfaceData()
-        //{
-        //    savedLamps.Items.Clear();
-        //    savedLamps.Items.Add("Select Lamp");
-        //    savedLamps.Items.Add("Add Lamp");
-        //    foreach (Lamp lamp in Controller.MainController.GetInstance().savedLamps)
-        //        savedLamps.Items.Add(lamp);
-        //    savedLamps.SelectedIndex = 0;
-        //}
+        public void RefreshInterfaceData()
+        {
+
+        }
         public void refreshData()
         {
+            Binding bindingSavedLamps = new Binding();
+            bindingSavedLamps.Source = Controller.MainController.GetInstance();
+            bindingSavedLamps.Path = new PropertyPath("SavedLamps");
+            bindingSavedLamps.UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged;
+            savedLamps.SetBinding(ComboBox.ItemsSourceProperty, bindingSavedLamps);
             if (CurrentLamp == null)
             {
                 ipAndPort.Content = "Select lamp";
@@ -72,10 +69,18 @@ namespace AlexGyver_s_Lamp_Control_Panel
                 connectionMarker.Fill = new SolidColorBrush(Color.FromRgb(0, 255, 0));
                 ConsoleOut.Text = CurrentLamp.Logs;
                 connected = true;
-                if (Controller.MainController.GetInstance().savedLamps.Find(l => l.IP == CurrentLamp.IP) != null)
-                {
-                    saveLampBtn.Visibility = Visibility.Hidden;
-                }
+                Binding bindingEffects = new Binding();
+                bindingEffects.Source = CurrentLamp;
+                bindingEffects.Path = new PropertyPath("Effects");
+                bindingEffects.UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged;
+                EffectPicker.SetBinding(ComboBox.ItemsSourceProperty, bindingEffects);
+                if (Controller.MainController.GetInstance().SavedLamps.Count > 0)
+                    if (Controller.MainController.GetInstance().SavedLamps.Find(l => l.IP == CurrentLamp.IP) != null)
+                    {
+                        saveLampBtn.Visibility = Visibility.Hidden;
+                    }
+                    else
+                        saveLampBtn.Visibility = Visibility.Visible;
                 else
                     saveLampBtn.Visibility = Visibility.Visible;
             }
@@ -105,9 +110,9 @@ namespace AlexGyver_s_Lamp_Control_Panel
             object selected = savedLamps.SelectedItem;
             if (selected == null)
                 return;
-            if (  selected.GetType().Name == "".GetType().Name )
+            if (selected.GetType().Name == "".GetType().Name)
             {
-                if(selected.ToString() == "Add Lamp")
+                if (selected.ToString() == "Add Lamp")
                 {
                     AddLampWindow dialog = new AddLampWindow();
                     dialog.ShowDialog();
@@ -142,7 +147,7 @@ namespace AlexGyver_s_Lamp_Control_Panel
             AddLampWindow dialog;
             if (CurrentLamp != null)
             {
-                if (Controller.MainController.GetInstance().savedLamps.Find(l => l.IP == CurrentLamp.IP) != null)
+                if (Controller.MainController.GetInstance().SavedLamps.Find(l => l.IP == CurrentLamp.IP) != null)
                     return;
                 dialog = new AddLampWindow(CurrentLamp.IP, CurrentLamp.Port, CurrentLamp.Name);
             }
@@ -159,8 +164,8 @@ namespace AlexGyver_s_Lamp_Control_Panel
 
             var dialog = new AddLampWindow();
             dialog.ShowDialog();
-            if(dialog.ReturnValue!=null)
-            CurrentLamp = dialog.ReturnValue;
+            if (dialog.ReturnValue != null)
+                CurrentLamp = dialog.ReturnValue;
             refreshData();
             //RefreshInterfaceData();
         }
@@ -182,7 +187,38 @@ namespace AlexGyver_s_Lamp_Control_Panel
 
         private void button1_Copy_Click(object sender, RoutedEventArgs e)
         {
-            var x = CurrentLamp.InterfaceData;
+            refreshData();
+        }
+
+        private void EffectPicker_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (CurrentLamp != null)
+            {
+                CurrentLamp.ChangeEffect((EffectPicker.SelectedItem as Effect).Id);
+                effectNumberTB.Text = (EffectPicker.SelectedItem as Effect).Id.ToString();
+            }
+        }
+
+        private void button1_Click(object sender, RoutedEventArgs e)
+        {
+            if(CurrentLamp!=null)
+            CurrentLamp.Turn();
+        }
+
+        private void EffectPlusBTN_Click(object sender, RoutedEventArgs e)
+        {
+            int effect = int.Parse(effectNumberTB.Text)+1;
+            Effect[] effects = new Effect[EffectPicker.Items.Count];
+            EffectPicker.Items.CopyTo(effects,0);
+            EffectPicker.SelectedItem = Array.Find(effects, (Effect eff) => { return (eff as Effect).Id == effect; });
+        }
+
+        private void EffectMinusBTN_Click(object sender, RoutedEventArgs e)
+        {
+            int effect = int.Parse(effectNumberTB.Text) - 1;
+            Effect[] effects = new Effect[EffectPicker.Items.Count];
+            EffectPicker.Items.CopyTo(effects, 0);
+            EffectPicker.SelectedItem = Array.Find(effects, (Effect eff) => { return (eff as Effect).Id == effect; });
         }
     }
 }

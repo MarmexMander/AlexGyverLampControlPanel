@@ -27,10 +27,10 @@ namespace AlexGyver_s_Lamp_Control_Panel.Controller
             }
             return _instance;
         }
-        public List<FireLamp> savedLamps { get; private set;} = new List<FireLamp>();
+        public List<FireLamp> SavedLamps { get; private set;} = new List<FireLamp>();
         public void SaveLamp(FireLamp lamp)
         {
-            savedLamps.Add(lamp);
+            SavedLamps.Add(lamp);
         }
         public bool SaveToFile()
         {
@@ -39,7 +39,7 @@ namespace AlexGyver_s_Lamp_Control_Panel.Controller
             try
             {
                 stream = new FileStream("savedLamps.dat", FileMode.Create, FileAccess.Write);
-                formatter.Serialize(stream, savedLamps);
+                formatter.Serialize(stream, SavedLamps);
             }
             catch
             {
@@ -51,14 +51,14 @@ namespace AlexGyver_s_Lamp_Control_Panel.Controller
             }
             return true;
         }
-         public bool LoadFromFile()
+        public bool LoadFromFile()
         {
             BinaryFormatter formatter = new BinaryFormatter();
             FileStream stream = null;
             List<FireLamp> lamps;
             try
             {
-                stream = new FileStream("savedLamps.dat", FileMode.Open, FileAccess.Read);
+                stream = new FileStream("savedLamps.dat", FileMode.OpenOrCreate, FileAccess.Read);
                 lamps = formatter.Deserialize(stream) as List<FireLamp>;
             }
             catch
@@ -69,10 +69,10 @@ namespace AlexGyver_s_Lamp_Control_Panel.Controller
             {
                 stream.Close();
             }
-            savedLamps.Clear();
+            SavedLamps.Clear();
             foreach (FireLamp lamp in lamps)
             {
-                savedLamps.Add(lamp);
+                SavedLamps.Add(lamp);
             }
             return true;
         }

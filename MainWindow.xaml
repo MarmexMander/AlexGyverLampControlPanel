@@ -40,12 +40,12 @@
             <Grid x:Name="AdaptiveControlPanelGrid" Margin="10,37,10,10" IsEnabled="False">
             </Grid>
             <Grid x:Name="StaticControlPanelGrid" Margin="10,37,10,10">
-                <ComboBox x:Name="comboBox" Margin="50,20,50,0" VerticalAlignment="Top"/>
-                <Button x:Name="button" Content="⯇" HorizontalAlignment="Left" Margin="50,42,0,0" VerticalAlignment="Top" Width="22" Height="22"/>
-                <Button x:Name="button_Copy" Content="⯈" HorizontalAlignment="Left" Margin="116,42,0,0" VerticalAlignment="Top" Width="22" Height="22"/>
-                <Button x:Name="button1" Content="Turn On/Off" Margin="0,42,50,0" VerticalAlignment="Top" Height="22" HorizontalAlignment="Right" Width="88"/>
+                <ComboBox x:Name="EffectPicker" Margin="50,20,50,0" VerticalAlignment="Top" SelectionChanged="EffectPicker_SelectionChanged"/>
+                <Button x:Name="EffectMinusBTN" Content="⯇" HorizontalAlignment="Left" Margin="50,42,0,0" VerticalAlignment="Top" Width="22" Height="22" Click="EffectMinusBTN_Click"/>
+                <Button x:Name="EffectPlusBTN" Content="⯈" HorizontalAlignment="Left" Margin="116,42,0,0" VerticalAlignment="Top" Width="22" Height="22" Click="EffectPlusBTN_Click"/>
+                <Button x:Name="TurnBtn" Content="Turn On/Off" Margin="0,42,50,0" VerticalAlignment="Top" Height="22" HorizontalAlignment="Right" Width="88" Click="button1_Click"/>
                 <Border BorderBrush="Black" BorderThickness="1" HorizontalAlignment="Left" Height="22" Margin="72,42,0,0" VerticalAlignment="Top" Width="44">
-                    <TextBlock x:Name="effectNumber" TextWrapping="Wrap" Text="" TextAlignment="Center" LineHeight="10" FontSize="14"/>
+                    <TextBlock x:Name="effectNumberTB" TextWrapping="Wrap" Text="" TextAlignment="Center" LineHeight="10" FontSize="14"/>
 
                 </Border>
                 <StackPanel Margin="50,69,50,10">
