@@ -13,7 +13,7 @@
                 <MenuItem Header="_Setings" />
             </MenuItem>
             <MenuItem Header="_Window">
-                <MenuItem Header="_UDP Console" IsCheckable="True" IsChecked="False" Checked="MenuItem_Checked" Unchecked="MenuItem_Unchecked" />
+                <MenuItem Header="_Lamp Console" IsCheckable="True" IsChecked="False" Checked="MenuItem_Checked" Unchecked="MenuItem_Unchecked" />
             </MenuItem>
         </Menu>
         <ToolBar DockPanel.Dock="Bottom">
