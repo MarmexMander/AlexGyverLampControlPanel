@@ -25,11 +25,12 @@ namespace AlexGyver_s_Lamp_Control_Panel
         {
             InitializeComponent();
         }
-        public AddLampWindow(string ip, int port, string name = "")
+        public AddLampWindow(string ip, int port, bool isKDnFirmware, string name = "")
         {
             InitializeComponent();
             ipTB.Text = ip;
             portTB.Text = port.ToString();
+            checkBox.IsChecked = isKDnFirmware;
             nameTB.Text = name;
         }
 

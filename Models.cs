@@ -36,6 +36,7 @@ namespace AlexGyver_s_Lamp_Control_Panel.Models
         string Name { get; set; }
         XmlNode InterfaceData { get; }
         List<Effect> Effects { get; }
+        Effect CurrentEffect { get; set; }
         string Logs { get; }
         string LastOutput { get; }
         bool IsEnabled { get; set; }
@@ -58,9 +59,23 @@ namespace AlexGyver_s_Lamp_Control_Panel.Models
         public string Name { get; set; }
         public List<Effect> Effects { get; private set; }
         [NonSerialized]
+        Effect currentEffect;
+        public Effect CurrentEffect
+        {
+            get
+            {
+                return currentEffect;
+            }
+            set
+            {
+                ChangeEffect(value.Id);
+            }
+        }
+        [NonSerialized]
         string logs;
         public string Logs { get { return logs; } }
         public string LastOutput { get; private set; }
+        [NonSerialized]
         bool isEnabled;
         public bool IsEnabled
         {
@@ -88,6 +103,11 @@ namespace AlexGyver_s_Lamp_Control_Panel.Models
             Port = port;
             Name = name;
             iPEndPoint = new IPEndPoint(long.Parse(IP.Replace(".", "")), Port);
+        }
+        public bool RefreshInitData(int attempts = 1)
+        {
+            //TODO: Add echo parsing
+            return true;
         }
         public bool RefreshData(int attempts = 1)
         {
@@ -164,6 +184,7 @@ namespace AlexGyver_s_Lamp_Control_Panel.Models
         }
         public bool ChangeEffect(int id, int attempts = 1)
         {
+            currentEffect = Effects.Find(f => f.Id == id);
             return SendPacket("EFF" + id.ToString(), attempts);
         }
         public bool ChangeEffectArgument(string argument, object value, int attempts = 1)
@@ -185,9 +206,23 @@ namespace AlexGyver_s_Lamp_Control_Panel.Models
         public string Name { get; set; }
         public List<Effect> Effects { get; private set; }
         [NonSerialized]
+        Effect currentEffect;
+        public Effect CurrentEffect
+        {
+            get
+            {
+                return currentEffect;
+            }
+            set
+            {
+                ChangeEffect(value.Id);
+            }
+        }
+        [NonSerialized]
         string logs;
         public string Logs { get { return logs; } }
         public string LastOutput { get; private set; }
+        [NonSerialized]
         bool isEnabled;
         public bool IsEnabled
         {
@@ -211,6 +246,15 @@ namespace AlexGyver_s_Lamp_Control_Panel.Models
                 else return null;
             }
         }
+        XmlNode ConfigData
+        {
+            get
+            {
+                if (SendPacket("config"))
+                    return JsonConvert.DeserializeXmlNode("{\"root\":" + LastOutput + "}");
+                else return null;
+            }
+        }
         public KDnLamp(string ip, int port, string name = "")
         {
             IP = ip;
@@ -219,8 +263,7 @@ namespace AlexGyver_s_Lamp_Control_Panel.Models
             iPEndPoint = new IPEndPoint(long.Parse(IP.Replace(".", "")), Port);
             Effects = new List<Effect>();
         }
-
-        public bool RefreshData(int attempts = 1)
+        public bool RefreshInitData(int attempts = 1)
         {
             if (!SendPacket("heap", attempts))
                 return false;
@@ -233,6 +276,23 @@ namespace AlexGyver_s_Lamp_Control_Panel.Models
                 if (effectNode.Name == "options")
                 {
                     Effects.Add(new Effect(int.Parse(effectNode.ChildNodes[1].InnerText), effectNode.ChildNodes[0].InnerText));
+                }
+            }
+            return true;
+        }
+        public bool RefreshData(int attempts = 1)
+        {
+            if (!SendPacket("heap", attempts))
+                return false;
+            var configs = ConfigData.FirstChild.ChildNodes;
+            foreach (XmlNode property in configs)
+            {
+                switch (property.Name)
+                {
+                    case "ONflag": isEnabled = bool.Parse(property.InnerText); break;
+                    case "effList": currentEffect = Effects.Find(f => f.Id == int.Parse(property.InnerText)); break;
+                    default:
+                        break;
                 }
             }
             return true;
@@ -285,6 +345,7 @@ namespace AlexGyver_s_Lamp_Control_Panel.Models
         }
         public bool ChangeEffect(int id, int attempts = 1)
         {
+            currentEffect = Effects.Find(f => f.Id == id);
             return SendPacket("cmd?effect=" + id.ToString(), attempts);
         }
         public bool ChangeEffectArgument(string argument, object value, int attempts = 1)

@@ -25,29 +25,18 @@ namespace AlexGyver_s_Lamp_Control_Panel
     {
 
         FireLamp CurrentLamp { get; set; }
-        //Lamp CurrentLamp { get { return currentLamp; } set
-        //    {
-        //        currentLamp = value;
-        //    }
-
-        //}
         bool connected = false;
         public MainWindow()
         {
             InitializeComponent();
             Controller.MainController.GetInstance().LoadFromFile();
             refreshData();
-            //RefreshInterfaceData();
-
-            //currentLamp = new Lamp("192.168.0.73", 8888);
-            //refreshData();
-            //ConsoleOut.Text = currentLamp.Logs;
         }
 
-        public void RefreshInterfaceData()
-        {
+        //public void RefreshInterfaceData()
+        //{
 
-        }
+        //}
         public void refreshData()
         {
             Binding bindingSavedLamps = new Binding();
@@ -67,6 +56,8 @@ namespace AlexGyver_s_Lamp_Control_Panel
             if (CurrentLamp.RefreshData())
             {
                 connectionMarker.Fill = new SolidColorBrush(Color.FromRgb(0, 255, 0));
+                effectNumberTB.Text = CurrentLamp.CurrentEffect.Id.ToString();
+                EffectPicker.SelectedItem = CurrentLamp.Effects.Find(f => f.Id == CurrentLamp.CurrentEffect.Id);
                 ConsoleOut.Text = CurrentLamp.Logs;
                 connected = true;
                 Binding bindingEffects = new Binding();
@@ -128,6 +119,7 @@ namespace AlexGyver_s_Lamp_Control_Panel
             if (selected as FireLamp != null)
             {
                 CurrentLamp = savedLamps.SelectedItem as FireLamp;
+                CurrentLamp.RefreshInitData();
                 refreshData();
             }
         }
@@ -149,13 +141,12 @@ namespace AlexGyver_s_Lamp_Control_Panel
             {
                 if (Controller.MainController.GetInstance().SavedLamps.Find(l => l.IP == CurrentLamp.IP) != null)
                     return;
-                dialog = new AddLampWindow(CurrentLamp.IP, CurrentLamp.Port, CurrentLamp.Name);
+                dialog = new AddLampWindow(CurrentLamp.IP, CurrentLamp.Port,(CurrentLamp.GetType().FullName == "AlexGyver_s_Lamp_Control_Panel.Models.KDnLamp"), CurrentLamp.Name);
             }
             else
                 dialog = new AddLampWindow();
             dialog.ShowDialog();
             Controller.MainController.GetInstance().SaveLamp(dialog.ReturnValue);
-            //RefreshInterfaceData();
             refreshData();
         }
 
@@ -167,6 +158,7 @@ namespace AlexGyver_s_Lamp_Control_Panel
             if (dialog.ReturnValue != null)
                 CurrentLamp = dialog.ReturnValue;
             refreshData();
+            CurrentLamp.RefreshInitData();
             //RefreshInterfaceData();
         }
 
@@ -207,18 +199,14 @@ namespace AlexGyver_s_Lamp_Control_Panel
 
         private void EffectPlusBTN_Click(object sender, RoutedEventArgs e)
         {
-            int effect = int.Parse(effectNumberTB.Text)+1;
-            Effect[] effects = new Effect[EffectPicker.Items.Count];
-            EffectPicker.Items.CopyTo(effects,0);
-            EffectPicker.SelectedItem = Array.Find(effects, (Effect eff) => { return (eff as Effect).Id == effect; });
+            int effectId = int.Parse(effectNumberTB.Text)+1;
+            EffectPicker.SelectedItem = CurrentLamp.Effects.Find(f => f.Id == effectId);
         }
 
         private void EffectMinusBTN_Click(object sender, RoutedEventArgs e)
         {
-            int effect = int.Parse(effectNumberTB.Text) - 1;
-            Effect[] effects = new Effect[EffectPicker.Items.Count];
-            EffectPicker.Items.CopyTo(effects, 0);
-            EffectPicker.SelectedItem = Array.Find(effects, (Effect eff) => { return (eff as Effect).Id == effect; });
+            int effectId = int.Parse(effectNumberTB.Text) - 1;
+            EffectPicker.SelectedItem = CurrentLamp.Effects.Find(f => f.Id == effectId);
         }
     }
 }
