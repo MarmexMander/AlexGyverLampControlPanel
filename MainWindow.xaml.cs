@@ -159,7 +159,6 @@ namespace AlexGyver_s_Lamp_Control_Panel
                 CurrentLamp = dialog.ReturnValue;
             refreshData();
             CurrentLamp.RefreshInitData();
-            //RefreshInterfaceData();
         }
 
         private void MenuItem_Click(object sender, RoutedEventArgs e)
@@ -207,6 +206,16 @@ namespace AlexGyver_s_Lamp_Control_Panel
         {
             int effectId = int.Parse(effectNumberTB.Text) - 1;
             EffectPicker.SelectedItem = CurrentLamp.Effects.Find(f => f.Id == effectId);
+        }
+
+        private void MenuItem_Click_2(object sender, RoutedEventArgs e)
+        {
+            var dialog = new AddLampWindow();
+            dialog.ShowDialog();
+            if (dialog.ReturnValue != null)
+                CurrentLamp = dialog.ReturnValue;
+            refreshData();
+            CurrentLamp.RefreshInitData();
         }
     }
 }
